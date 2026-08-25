@@ -9,7 +9,7 @@ export default function Navbar() {
       <div className="nav-links">
         <NavLink to="/">Events</NavLink>
         <NavLink to="/om">Om Mellemrum</NavLink>
-      </div>
+      </div> 
     </nav>
   );
 }
