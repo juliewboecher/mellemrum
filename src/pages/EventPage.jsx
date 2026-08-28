@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { createRegistration } from "../lib/supabase";
+import styles from "./EventPage.modules.css";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -15,6 +16,7 @@ export default function EventPage() {
   const [event, setEvent] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     async function getEvent() {
@@ -49,6 +51,7 @@ export default function EventPage() {
 
       setName("");
       setEmail("");
+      setSubmitted(true);
     } catch (error) {
       console.error("Kunne ikke tilmelde:", error);
     }
@@ -62,22 +65,22 @@ export default function EventPage() {
 
   return (
     <>
-      <main className="event-page">
-        <Link className="back-link" to="/">
+      <main className={styles.eventpage}>
+        <Link className={styles.backlink} to="/">
           ← Alle events
         </Link>
 
-        <section className="event-detail">
+        <section className={styles.eventdetail}>
           <img src={event.image} alt="" />
 
-          <div className="event-detail-content">
-            <p className="event-category">{event.category}</p>
+          <div className={styles["event-detail-content"]}>
+            <p className={styles["event-category"]}>{event.category}</p>
 
             <h1>{event.title}</h1>
 
-            <p className="lead">{event.summary}</p>
+            <p className={styles.lead}>{event.summary}</p>
 
-            <div className="detail-list">
+            <div className={styles["detail-list"]}>
               <p>
                 <strong>Dato</strong>
                 {date.toLocaleDateString("da-DK", {
@@ -121,9 +124,9 @@ export default function EventPage() {
           </div>
         </section>
 
-        <section className="signup-panel">
+        <section className={styles.signuppanel}>
           <div>
-            <p className="eyebrow dark">Tilmelding</p>
+            <p className={styles.eyebrowdark}>Tilmelding</p>
 
             <h2>Reserver din plads</h2>
 
@@ -156,30 +159,36 @@ export default function EventPage() {
 
             <button type="submit">Tilmeld mig</button>
           </form>
+          {submitted && (
+            <div className={styles.successpopup}>
+              <h2>Tilmelding modtaget! ✓</h2>
+              <p>Tak for din tilmelding.</p>
+            </div>
+          )}
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="footer-top">
-          <div className="footer-intro">
-            <p className="footer-brand">
+      <footer className={styles.sitefooter}>
+        <div className={styles.footertop}>
+          <div className={styles.footerintro}>
+            <p className={styles.footerbrand}>
               mellemrum<span>.</span>
             </p>
 
             <p>Udvalgte kulturoplevelser og nye perspektiver på Aarhus.</p>
           </div>
 
-          <nav className="footer-links" aria-label="Footer">
-            <div className="footer-link-group">
-              <p className="footer-heading">Udforsk</p>
+          <nav className={styles.footerlinks} aria-label="Footer">
+            <div className={styles.footerlinkgroup}>
+              <p className={styles.footerheading}>Udforsk</p>
 
               <Link to="/">Events</Link>
 
               <Link to="/om">Om Mellemrum</Link>
             </div>
 
-            <div className="footer-link-group">
-              <p className="footer-heading">For arrangører</p>
+            <div className={styles.footerlinkgroup}>
+              <p className={styles.footerheading}>For arrangører</p>
 
               <Link to="/tilmeldinger">Se tilmeldinger</Link>
 
@@ -188,8 +197,8 @@ export default function EventPage() {
           </nav>
         </div>
 
-        <div className="footer-bottom">
-          <p className="footer-meta">© 2025 Mellemrum</p>
+        <div className={styles.footers}>
+          <p className={styles.footermeta}>© 2025 Mellemrum</p>
 
           <p>Aarhus, Danmark</p>
         </div>
