@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { createRegistration } from "../lib/supabase";
-import styles from "./EventPage.modules.css";
+import styles from "./EventPage.module.css";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
