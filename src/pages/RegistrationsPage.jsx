@@ -10,6 +10,7 @@ const headers = {
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState([]);
   const [registrationCount, setRegistrationCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     async function getRegistrations() {
@@ -22,6 +23,11 @@ export default function RegistrationsPage() {
     getRegistrations();
   }, []);
 
+  const filteredRegistrations = registrations.filter((registration) =>
+    registration.eventTitle?.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+ 
+
   return (
     <>
       <header className="admin-header">
@@ -29,7 +35,16 @@ export default function RegistrationsPage() {
         <h1>Tilmeldinger</h1>
         <p>{registrationCount} tilmeldinger i alt</p>
       </header>
+
       <main>
+        <input
+          className="registration-search"
+          type="text"
+          placeholder="Søg efter event..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
         <div className="registration-list">
           <div className="registration-row registration-labels">
             <span>Navn</span>
@@ -37,14 +52,16 @@ export default function RegistrationsPage() {
             <span>Dato</span>
             <span>Status</span>
           </div>
-          {registrations.map((registration) => (
+          {filteredRegistrations.map((registration) => (
             <div className="registration-row" key={registration.id}>
               <div>
                 <strong>{registration.name}</strong>
                 <small>{registration.email}</small>
               </div>
               <span>{registration.eventTitle}</span>
-              <span>{new Date(registration.eventDate).toLocaleDateString("da-DK")}</span>
+              <span>
+                {new Date(registration.eventDate).toLocaleDateString("da-DK")}
+              </span>
               <span className="status">{registration.status}</span>
             </div>
           ))}
