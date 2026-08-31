@@ -11,16 +11,28 @@ export default function HomePage() {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
+  const [registrations, setRegistrations] = useState([]);
 
-  useEffect(() => {
-    async function getEvents() {
-      const response = await fetch(`${SUPABASE_URL}/events?order=date.asc`, { headers });
-      const data = await response.json();
-      setEvents(data);
-    }
+ useEffect(() => {
+   async function load() {
+     const [eventsRes, regsRes] = await Promise.all([
+       fetch(`${SUPABASE_URL}/events?order=date.asc`, { headers }),
+       fetch(`${SUPABASE_URL}/registrations`, { headers }),
+     ]);
 
-    getEvents();
-  }, []);
+     const eventsData = await eventsRes.json();
+     const regsData = await regsRes.json();
+
+     setEvents(eventsData);
+     setRegistrations(regsData);
+   }
+
+   load();
+ }, []);
+
+  function getSignupCount(eventTitle) {
+    return registrations.filter((r) => r.eventTitle === eventTitle).length;
+  }
 
   const categories = ["Alle", ...new Set(events.map((event) => event.category))];
 
@@ -49,7 +61,8 @@ export default function HomePage() {
         <p className="eyebrow">Kultur i Aarhus</p>
         <h1>Find plads til noget nyt.</h1>
         <p className="hero-copy">
-          Koncerter, talks og workshops samlet ét sted. Find dit næste event, og tilmeld dig på få minutter.
+          Koncerter, talks og workshops samlet ét sted. Find dit næste event, og
+          tilmeld dig på få minutter.
         </p>
         <a className="hero-link" href="#events">
           Se kommende events ↓
@@ -77,7 +90,10 @@ export default function HomePage() {
           </label>
           <label>
             Kategori
-            <select value={category} onChange={(event) => setCategory(event.target.value)}>
+            <select
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
+            >
               {categories.map((item) => (
                 <option key={item}>{item}</option>
               ))}
@@ -97,9 +113,12 @@ export default function HomePage() {
                   <span>{formatEventDate(event.date)}</span>
                   <span>{event.venueName}</span>
                 </div>
-                <Link className="card-link" to={`/events/${event.id}`}>
-                  Læs mere
-                </Link>
+                <div className="event-actions">
+                  <Link className="card-link" to={`/events/${event.id}`}>
+                    Læs mere
+                  </Link>
+                  <span>{getSignupCount(event.title)} tilmeldte</span>
+                </div>
               </div>
             </article>
           ))}

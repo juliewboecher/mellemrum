@@ -216,6 +216,13 @@ select:focus {
   padding-top: 1rem;
 }
 
+.event-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  align-items: center;
+}
+
 .input-error {
   border: 2px solid red;
 }
