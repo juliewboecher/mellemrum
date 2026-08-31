@@ -25,6 +25,8 @@ select {
   font: inherit;
 }
 
+/* HomePage Styles */
+
 .hero {
   background:
     linear-gradient(90deg, rgba(12, 42, 34, 0.92) 0%, rgba(12, 42, 34, 0.7) 52%, rgba(12, 42, 34, 0.28) 100%),
@@ -137,6 +139,7 @@ select {
   min-height: 48px;
   padding: 0.75rem 0.9rem;
   transition: border-color 160ms ease, box-shadow 160ms ease;
+  width: 100%;
 }
 
 input:focus,
@@ -213,6 +216,19 @@ select:focus {
   padding-top: 1rem;
 }
 
+.input-error {
+  border: 2px solid red;
+}
+
+.field-error {
+  color: #c0392b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0.35rem 0 0;
+}
+
+
+
 .card-link {
   align-self: flex-start;
   background: var(--green);
@@ -242,6 +258,8 @@ select:focus {
   color: white;
   padding: 5rem var(--content-edge);
 }
+
+/* AboutPage Styles */
 
 .about-header {
   background:
@@ -490,6 +508,8 @@ select:focus {
   text-decoration: none;
 }
 
+/* EventPage Styles */
+
 .event-page {
   max-width: 1280px;
 }
@@ -591,6 +611,8 @@ select:focus {
   margin: 0;
 }
 
+/* RegistrationPage Styles */
+
 .registration-list {
   background: white;
   border: 1px solid var(--line);
@@ -656,6 +678,8 @@ select:focus {
   padding: 0.75rem 1rem;
   text-decoration: none;
 }
+
+/* Site Footer Styles */
 
 .site-footer {
   background: #102f28;
@@ -735,6 +759,8 @@ select:focus {
   margin: 0;
   white-space: nowrap;
 }
+
+/* Responsive Styles */
 
 @media (max-width: 900px) {
   .event-grid {

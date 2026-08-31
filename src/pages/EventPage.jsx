@@ -36,7 +36,7 @@ export default function EventPage() {
   async function handleSubmit(eventSubmit) {
     eventSubmit.preventDefault();
     const newErrors = {};
-
+   
     if (!name) {
       newErrors.name = true;
     }
@@ -150,29 +150,39 @@ export default function EventPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={name}
-              onChange={(inputEvent) => {
-                setName(inputEvent.target.value);
-                setErrors({ ...errors, name: false });
-              }}
-              className={errors.name ? "inputerror" : ""}
-              required
-            />
+          <form onSubmit={handleSubmit} noValidate>
+  <div>
+    <input
+      type="text"
+      value={name}
+      onChange={(e) => {
+        setName(e.target.value);
+        setErrors((prev) => ({ ...prev, name: false }));
+      }}
+      placeholder="Dit navn"
+      className={errors.name ? "input-error" : ""}
+    />
+    {errors.name && (
+      <p className="field-error">Udfyld feltet</p>
+    )}
+  </div>
 
-            <input
-              type="email"
-              value={email}
-              onChange={(inputEvent) => {
-                setEmail(inputEvent.target.value);
-                setErrors({ ...errors, email: false });
-              }}
-              placeholder="dig@example.com"
-              className={errors.email ? "inputerror" : ""}
-              required
-            />
+  <div>
+    <input
+      type="email"
+      value={email}
+      onChange={(e) => {
+        setEmail(e.target.value);
+        setErrors((prev) => ({ ...prev, email: false }));
+      }}
+      placeholder="dig@example.com"
+      className={errors.email ? "input-error" : ""}
+    />
+    {errors.email && (
+      <p className="field-error">Udfyld feltet</p>
+    )}
+  </div>
+
 
             <button type="submit">Tilmeld mig</button>
           </form>
