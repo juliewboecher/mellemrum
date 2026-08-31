@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const headers = {
@@ -8,10 +8,12 @@ const headers = {
 };
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
   const [registrations, setRegistrations] = useState([]);
+  
 
  useEffect(() => {
    async function load() {
@@ -22,6 +24,7 @@ export default function HomePage() {
 
      const eventsData = await eventsRes.json();
      const regsData = await regsRes.json();
+     
 
      setEvents(eventsData);
      setRegistrations(regsData);
@@ -40,6 +43,7 @@ export default function HomePage() {
     const searchText = `${event.title} ${event.summary} ${event.venueName}`.toLowerCase();
     const matchesSearch = searchText.includes(search.toLowerCase());
     const matchesCategory = category === "Alle" || event.category === category;
+    
 
     return matchesSearch && matchesCategory;
   });
@@ -103,7 +107,12 @@ export default function HomePage() {
 
         <section className="event-grid">
           {filteredEvents.map((event) => (
-            <article className="event-card" key={event.id}>
+            <article
+              className="event-card"
+              key={event.id}
+              onClick={() => navigate(`/events/${event.id}`)}
+              style={{ cursor: "pointer" }}
+            >
               <img src={event.image} alt="" />
               <div className="event-card-content">
                 <p className="event-category">{event.category}</p>
@@ -114,7 +123,11 @@ export default function HomePage() {
                   <span>{event.venueName}</span>
                 </div>
                 <div className="event-actions">
-                  <Link className="card-link" to={`/events/${event.id}`}>
+                  <Link
+                    className="card-link"
+                    to={`/events/${event.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     Læs mere
                   </Link>
                   <span>{getSignupCount(event.title)} tilmeldte</span>
