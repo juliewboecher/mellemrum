@@ -659,6 +659,12 @@ select:focus {
   text-transform: uppercase;
 }
 
+.registration-search {
+  border: 1px solid var(--line);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
 .status {
   background: #dff3cc;
   border-radius: 999px;

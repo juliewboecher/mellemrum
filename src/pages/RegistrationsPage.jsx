@@ -38,6 +38,7 @@ export default function RegistrationsPage() {
 
       <main>
         <input
+          className="registration-search"
           type="text"
           placeholder="Søg efter event..."
           value={searchTerm}
