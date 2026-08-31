@@ -18,20 +18,28 @@ export default function EventPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [registrations, setRegistrations] = useState([]);
 
   useEffect(() => {
-    async function getEvent() {
-      const response = await fetch(`${SUPABASE_URL}/events?id=eq.${eventId}`, {
-        headers,
-      });
+    async function load() {
+      const [eventRes, regsRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/events?id=eq.${eventId}`, { headers }),
+        fetch(`${SUPABASE_URL}/registrations`, { headers }),
+      ]);
 
-      const data = await response.json();
+      const eventData = await eventRes.json();
+      const regsData = await regsRes.json();
 
-      setEvent(data[0]);
+      setEvent(eventData[0]);
+      setRegistrations(regsData);
     }
 
-    getEvent();
+    load();
   }, [eventId]);
+
+  function getSignupCount(eventTitle) {
+    return registrations.filter((reg) => reg.eventTitle === eventTitle).length;
+  }
 
   async function handleSubmit(eventSubmit) {
     eventSubmit.preventDefault();
@@ -62,8 +70,7 @@ export default function EventPage() {
     try {
       await createRegistration(registration);
 
-      console.log("Tilmelding sendt!");
-
+      setRegistrations((prev) => [...prev, registration]);
       setName("");
       setEmail("");
       setSubmitted(true);
@@ -132,6 +139,10 @@ export default function EventPage() {
                 <strong>Pris</strong>
 
                 {event.price === 0 ? "Gratis" : `${event.price} kr.`}
+              </p>
+              <p>
+                <strong>Tilmeldte</strong>
+                <span>{getSignupCount(event.title)}</span>
               </p>
             </div>
 
