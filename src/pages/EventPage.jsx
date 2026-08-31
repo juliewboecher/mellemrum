@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { createRegistration } from "../lib/supabase";
-import styles from "./EventPage.module.css";
+
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -17,6 +17,7 @@ export default function EventPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     async function getEvent() {
@@ -34,6 +35,20 @@ export default function EventPage() {
 
   async function handleSubmit(eventSubmit) {
     eventSubmit.preventDefault();
+    const newErrors = {};
+
+    if (!name) {
+      newErrors.name = true;
+    }
+
+    if (!email) {
+      newErrors.email = true;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
     const registration = {
       name,
@@ -65,22 +80,22 @@ export default function EventPage() {
 
   return (
     <>
-      <main className={styles.eventpage}>
-        <Link className={styles.backlink} to="/">
+      <main className="event-page">
+        <Link className="back-link" to="/">
           ← Alle events
         </Link>
 
-        <section className={styles.eventdetail}>
+        <section className="event-detail">
           <img src={event.image} alt="" />
 
-          <div className={styles["event-detail-content"]}>
-            <p className={styles["event-category"]}>{event.category}</p>
+          <div className="event-detail-content">
+            <p className="event-category">{event.category}</p>
 
             <h1>{event.title}</h1>
 
-            <p className={styles.lead}>{event.summary}</p>
+            <p className="lead">{event.summary}</p>
 
-            <div className={styles["detail-list"]}>
+            <div className="detail-list">
               <p>
                 <strong>Dato</strong>
                 {date.toLocaleDateString("da-DK", {
@@ -124,9 +139,9 @@ export default function EventPage() {
           </div>
         </section>
 
-        <section className={styles.signuppanel}>
+        <section className="signup-panel">
           <div>
-            <p className={styles.eyebrowdark}>Tilmelding</p>
+            <p className="eyebrowdark">Tilmelding</p>
 
             <h2>Reserver din plads</h2>
 
@@ -136,31 +151,33 @@ export default function EventPage() {
           </div>
 
           <form onSubmit={handleSubmit}>
-            <label>
-              Navn
-              <input
-                type="text"
-                value={name}
-                onChange={(inputEvent) => setName(inputEvent.target.value)}
-                required
-              />
-            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(inputEvent) => {
+                setName(inputEvent.target.value);
+                setErrors({ ...errors, name: false });
+              }}
+              className={errors.name ? "inputerror" : ""}
+              required
+            />
 
-            <label>
-              E-mail
-              <input
-                type="email"
-                value={email}
-                onChange={(inputEvent) => setEmail(inputEvent.target.value)}
-                placeholder="dig@example.com"
-                required
-              />
-            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(inputEvent) => {
+                setEmail(inputEvent.target.value);
+                setErrors({ ...errors, email: false });
+              }}
+              placeholder="dig@example.com"
+              className={errors.email ? "inputerror" : ""}
+              required
+            />
 
             <button type="submit">Tilmeld mig</button>
           </form>
           {submitted && (
-            <div className={styles.successpopup}>
+            <div className="success-popup">
               <h2>Tilmelding modtaget! ✓</h2>
               <p>Tak for din tilmelding.</p>
             </div>
@@ -168,27 +185,27 @@ export default function EventPage() {
         </section>
       </main>
 
-      <footer className={styles.sitefooter}>
-        <div className={styles.footertop}>
-          <div className={styles.footerintro}>
-            <p className={styles.footerbrand}>
+      <footer className="site-footer">
+        <div className="footer-top">
+          <div className="footer-intro">
+            <p className="footer-brand">
               mellemrum<span>.</span>
             </p>
 
             <p>Udvalgte kulturoplevelser og nye perspektiver på Aarhus.</p>
           </div>
 
-          <nav className={styles.footerlinks} aria-label="Footer">
-            <div className={styles.footerlinkgroup}>
-              <p className={styles.footerheading}>Udforsk</p>
+          <nav className="footer-links" aria-label="Footer">
+            <div className="footer-link-group">
+              <p className="footer-heading">Udforsk</p>
 
               <Link to="/">Events</Link>
 
               <Link to="/om">Om Mellemrum</Link>
             </div>
 
-            <div className={styles.footerlinkgroup}>
-              <p className={styles.footerheading}>For arrangører</p>
+            <div className="footer-link-group">
+              <p className="footer-heading">For arrangører</p>
 
               <Link to="/tilmeldinger">Se tilmeldinger</Link>
 
@@ -197,8 +214,8 @@ export default function EventPage() {
           </nav>
         </div>
 
-        <div className={styles.footers}>
-          <p className={styles.footermeta}>© 2025 Mellemrum</p>
+        <div className="footers">
+          <p className="footer-meta">© 2025 Mellemrum</p>
 
           <p>Aarhus, Danmark</p>
         </div>
