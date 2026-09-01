@@ -23,7 +23,7 @@ export default function EventPage() {
   useEffect(() => {
     async function load() {
       const [eventRes, regsRes] = await Promise.all([
-        fetch(`${SUPABASE_URL}/events?id=eq.${eventId}`, { headers }),
+        fetch(`${SUPABASE_URL}/events?id=eq.${eventId}&select=*,venue:venues(id,name,website)`, { headers }),
         fetch(`${SUPABASE_URL}/registrations`, { headers }),
       ]);
 
@@ -116,6 +116,10 @@ export default function EventPage() {
                   minute: "2-digit",
                 })}
               </p>
+              <p>
+                <strong>Arrangør</strong>
+                {event.venue?.name}
+              </p>
 
               <p>
                 <strong>Sted</strong>
@@ -162,38 +166,33 @@ export default function EventPage() {
           </div>
 
           <form onSubmit={handleSubmit} noValidate>
-  <div>
-    <input
-      type="text"
-      value={name}
-      onChange={(e) => {
-        setName(e.target.value);
-        setErrors((prev) => ({ ...prev, name: false }));
-      }}
-      placeholder="Dit navn"
-      className={errors.name ? "input-error" : ""}
-    />
-    {errors.name && (
-      <p className="field-error">Udfyld feltet</p>
-    )}
-  </div>
+            <div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setErrors((prev) => ({ ...prev, name: false }));
+                }}
+                placeholder="Dit navn"
+                className={errors.name ? "input-error" : ""}
+              />
+              {errors.name && <p className="field-error">Udfyld feltet</p>}
+            </div>
 
-  <div>
-    <input
-      type="email"
-      value={email}
-      onChange={(e) => {
-        setEmail(e.target.value);
-        setErrors((prev) => ({ ...prev, email: false }));
-      }}
-      placeholder="dig@example.com"
-      className={errors.email ? "input-error" : ""}
-    />
-    {errors.email && (
-      <p className="field-error">Udfyld feltet</p>
-    )}
-  </div>
-
+            <div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors((prev) => ({ ...prev, email: false }));
+                }}
+                placeholder="dig@example.com"
+                className={errors.email ? "input-error" : ""}
+              />
+              {errors.email && <p className="field-error">Udfyld feltet</p>}
+            </div>
 
             <button type="submit">Tilmeld mig</button>
           </form>
