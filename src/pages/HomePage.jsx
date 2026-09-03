@@ -7,45 +7,70 @@ const headers = {
   "Content-Type": "application/json"
 };
 
+function EventCardSkeleton() {
+  return (
+    <article className="event-card skeleton">
+      <div className="skeleton-image"></div>
+      <div className="event-card-content">
+        <div className="skeleton-line short"></div>
+        <div className="skeleton-line"></div>
+        <div className="skeleton-line"></div>
+        <div className="skeleton-line medium"></div>
+      </div>
+    </article>
+  );
+}
+
 export default function HomePage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
   const [registrations, setRegistrations] = useState([]);
-  
+  const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-   async function load() {
-     const [eventsRes, regsRes] = await Promise.all([
-       fetch(`${SUPABASE_URL}/events?select=*,venue:venues(id,name,website)&order=date.asc`,{ headers },
-       ),
-       fetch(`${SUPABASE_URL}/registrations`, { headers }),
-       
-     ]);
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
 
-     const eventsData = await eventsRes.json();
-     const regsData = await regsRes.json();
-     
+        const [eventsRes, regsRes] = await Promise.all([
+          fetch(
+            `${SUPABASE_URL}/events?select=*,venue:venues(id,name,website)&order=date.asc`,
+            { headers },
+          ),
+          fetch(`${SUPABASE_URL}/registrations`, { headers }),
+        ]);
 
-     setEvents(eventsData);
-     setRegistrations(regsData);
-   }
+        const eventsData = await eventsRes.json();
+        const regsData = await regsRes.json();
 
-   load();
- }, []);
+        setEvents(Array.isArray(eventsData) ? eventsData : []);
+        setRegistrations(Array.isArray(regsData) ? regsData : []);
+      } catch (error) {
+        console.error("Fejl:", error);
+      } finally {
+        setLoading(false); 
+      }
+    }
+
+    load();
+  }, []);
 
   function getSignupCount(eventTitle) {
     return registrations.filter((r) => r.eventTitle === eventTitle).length;
   }
 
-  const categories = ["Alle", ...new Set(events.map((event) => event.category))];
+  const categories = [
+    "Alle",
+    ...new Set(events.map((event) => event.category)),
+  ];
 
   const filteredEvents = events.filter((event) => {
-    const searchText = `${event.title} ${event.summary} ${event.venueName}`.toLowerCase();
+    const searchText =
+      `${event.title} ${event.summary} ${event.venueName}`.toLowerCase();
     const matchesSearch = searchText.includes(search.toLowerCase());
     const matchesCategory = category === "Alle" || event.category === category;
-    
 
     return matchesSearch && matchesCategory;
   });
@@ -55,7 +80,7 @@ export default function HomePage() {
     const formattedDate = date.toLocaleDateString("da-DK", {
       weekday: "long",
       day: "numeric",
-      month: "long"
+      month: "long",
     });
 
     return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
@@ -108,20 +133,23 @@ export default function HomePage() {
         </section>
 
         <section className="event-grid">
-          {filteredEvents.map((event) => (
-            <article
-              className="event-card"
-              key={event.id}
-              onClick={() => navigate(`/events/${event.id}`)}
+          {loading
+    ? Array.from({ length: 6 }).map((_, i) => (
+        <EventCardSkeleton key={i} />
+      ))
+    : filteredEvents.map((event) => (
+        <article
+          className="event-card"
+          key={event.id}
+          onClick={() => navigate(`/events/${event.id}`)}
               style={{ cursor: "pointer" }}
             >
-              <img src={event.image} alt="" />
+              <img src={event.image} alt="" loading="lazy" />
               <div className="event-card-content">
                 <p className="event-category">{event.category}</p>
                 <h3>{event.title}</h3>
                 <p>{event.summary}</p>
-                <p>{event.venue?.name}
-</p>
+                <p>{event.venue?.name}</p>
                 <div className="event-meta">
                   <span>{formatEventDate(event.date)}</span>
                   <span>{event.venueName}</span>
