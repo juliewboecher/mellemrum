@@ -10,6 +10,41 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+function EventPageSkeleton() {
+  return (
+    <main className="event-page">
+      <div
+        className="back-link skeleton-line short"
+        style={{ width: "120px", height: "20px" }}
+      ></div>
+
+      <section className="event-detail">
+        <div
+          className="skeleton-image"
+          style={{ aspectRatio: "16/10", borderRadius: "12px" }}
+        ></div>
+
+        <div className="event-detail-content">
+          <div className="skeleton-line short"></div>
+          <div
+            className="skeleton-line"
+            style={{ height: "32px", width: "80%" }}
+          ></div>
+          <div className="skeleton-line"></div>
+          <div className="skeleton-line medium"></div>
+
+          <div className="detail-list" style={{ marginTop: "2rem" }}>
+            <div className="skeleton-line medium"></div>
+            <div className="skeleton-line medium"></div>
+            <div className="skeleton-line"></div>
+            <div className="skeleton-line short"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 export default function EventPage() {
   const { eventId } = useParams();
 
@@ -19,9 +54,13 @@ export default function EventPage() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [registrations, setRegistrations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
+    try {
+      setLoading(true);
+
       const [eventRes, regsRes] = await Promise.all([
         fetch(`${SUPABASE_URL}/events?id=eq.${eventId}&select=*,venue:venues(id,name,website)`, { headers }),
         fetch(`${SUPABASE_URL}/registrations`, { headers }),
@@ -32,7 +71,15 @@ export default function EventPage() {
 
       setEvent(eventData[0]);
       setRegistrations(regsData);
+
+      setEvent(eventData[0] ?? null);
+      setRegistrations(Array.isArray(regsData) ? regsData : []);
+    } catch (error) {
+      console.error("Fejl:", error);
+    } finally {
+      setLoading(false);
     }
+  }
 
     load();
   }, [eventId]);
@@ -79,8 +126,17 @@ export default function EventPage() {
     }
   }
 
+  if (loading) {
+    return <EventPageSkeleton />;
+  }
+
   if (!event) {
-    return null;
+    return (
+      <main className="event-page">
+        <p>Eventet blev ikke fundet.</p>
+        <Link to="/">← Tilbage til alle events</Link>
+      </main>
+    );
   }
 
   const date = new Date(event.date);

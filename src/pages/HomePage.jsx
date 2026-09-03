@@ -50,7 +50,7 @@ export default function HomePage() {
       } catch (error) {
         console.error("Fejl:", error);
       } finally {
-        setLoading(false); // vigtigt: sluk loading uanset hvad
+        setLoading(false); 
       }
     }
 
