@@ -18,8 +18,10 @@ export default function HomePage() {
  useEffect(() => {
    async function load() {
      const [eventsRes, regsRes] = await Promise.all([
-       fetch(`${SUPABASE_URL}/events?order=date.asc`, { headers }),
+       fetch(`${SUPABASE_URL}/events?select=*,venue:venues(id,name,website)&order=date.asc`,{ headers },
+       ),
        fetch(`${SUPABASE_URL}/registrations`, { headers }),
+       
      ]);
 
      const eventsData = await eventsRes.json();
@@ -118,6 +120,8 @@ export default function HomePage() {
                 <p className="event-category">{event.category}</p>
                 <h3>{event.title}</h3>
                 <p>{event.summary}</p>
+                <p>{event.venue?.name}
+</p>
                 <div className="event-meta">
                   <span>{formatEventDate(event.date)}</span>
                   <span>{event.venueName}</span>
