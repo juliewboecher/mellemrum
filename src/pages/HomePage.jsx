@@ -136,14 +136,17 @@ export default function HomePage() {
         </section>
 
         <section className="event-grid">
-          {loading
-            ? Array.from({ length: 6 }).map((_, i) => (
-                <EventCardSkeleton key={i} />
-              ))
-            : filteredEvents.map((event) => (
-                <article className="event-card" key={event.id}>
-                  <Link to={`/events/${event.id}`} className="event-card-link">
-                    <img src={event.image} alt={event.title} loading="lazy" />
+          {loading ? (
+          Array.from({ length: 6 }).map((_, i) => (
+          <EventCardSkeleton key={i} />
+          ))
+          ) : filteredEvents.length === 0 ? (
+            <p className="no-results">Ingen events matcher din søgning.</p>
+          ) : (
+            filteredEvents.map((event) => (
+            <article className="event-card" key={event.id}>
+            <Link to={`/events/${event.id}`} className="event-card-link">
+            <img src={event.image} alt={event.title} loading="lazy" />
 
                     <div className="event-card-content">
                       <p className="event-category">{event.category}</p>
@@ -164,7 +167,8 @@ export default function HomePage() {
                     <span>{getSignupCount(event.title)} tilmeldte</span>
                   </div>
                 </article>
-              ))}
+              ))
+            )}
         </section>
       </main>
       <Footer />
