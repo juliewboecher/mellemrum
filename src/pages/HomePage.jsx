@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import Footer from "../components/Footer";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const headers = {
@@ -134,67 +135,42 @@ export default function HomePage() {
 
         <section className="event-grid">
           {loading
-    ? Array.from({ length: 6 }).map((_, i) => (
-        <EventCardSkeleton key={i} />
-      ))
-    : filteredEvents.map((event) => (
-        <article
-          className="event-card"
-          key={event.id}
-          onClick={() => navigate(`/events/${event.id}`)}
-              style={{ cursor: "pointer" }}
-            >
-              <img src={event.image} alt="" loading="lazy" />
-              <div className="event-card-content">
-                <p className="event-category">{event.category}</p>
-                <h3>{event.title}</h3>
-                <p>{event.summary}</p>
-                <p>{event.venue?.name}</p>
-                <div className="event-meta">
-                  <span>{formatEventDate(event.date)}</span>
-                  <span>{event.venueName}</span>
-                </div>
-                <div className="event-actions">
-                  <Link
-                    className="card-link"
-                    to={`/events/${event.id}`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Læs mere
-                  </Link>
-                  <span>{getSignupCount(event.title)} tilmeldte</span>
-                </div>
-              </div>
-            </article>
-          ))}
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <EventCardSkeleton key={i} />
+              ))
+            : filteredEvents.map((event) => (
+                <article
+                  className="event-card"
+                  key={event.id}
+                  onClick={() => navigate(`/events/${event.id}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <img src={event.image} alt="" loading="lazy" />
+                  <div className="event-card-content">
+                    <p className="event-category">{event.category}</p>
+                    <h3>{event.title}</h3>
+                    <p>{event.summary}</p>
+                    <p>{event.venue?.name}</p>
+                    <div className="event-meta">
+                      <span>{formatEventDate(event.date)}</span>
+                      <span>{event.venueName}</span>
+                    </div>
+                    <div className="event-actions">
+                      <Link
+                        className="card-link"
+                        to={`/events/${event.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Læs mere
+                      </Link>
+                      <span>{getSignupCount(event.title)} tilmeldte</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
         </section>
       </main>
-      <footer className="site-footer">
-        <div className="footer-top">
-          <div className="footer-intro">
-            <p className="footer-brand">
-              mellemrum<span>.</span>
-            </p>
-            <p>Udvalgte kulturoplevelser og nye perspektiver på Aarhus.</p>
-          </div>
-          <nav className="footer-links" aria-label="Footer">
-            <div className="footer-link-group">
-              <p className="footer-heading">Udforsk</p>
-              <Link to="/">Events</Link>
-              <Link to="/om">Om Mellemrum</Link>
-            </div>
-            <div className="footer-link-group">
-              <p className="footer-heading">For arrangører</p>
-              <Link to="/tilmeldinger">Se tilmeldinger</Link>
-              <a href="mailto:hej@mellemrum.dk">Kontakt os</a>
-            </div>
-          </nav>
-        </div>
-        <div className="footer-bottom">
-          <p className="footer-meta">© 2026 Mellemrum</p>
-          <p>Aarhus, Danmark</p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
