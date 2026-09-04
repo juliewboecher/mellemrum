@@ -915,8 +915,11 @@ a.event-card {
 }
 
 .nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  gap: 0.4rem;
+  gap: 1.5rem;
 }
 
 .nav-links a {
