@@ -989,3 +989,37 @@ a.event-card {
   50% { opacity: 0.4; }
   100% { opacity: 1; }
 }
+
+/* Not Found Page Styles */
+.not-found {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.not-found-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.not-found-code {
+  font-size: 6rem;
+  font-weight: bold;
+  line-height: 1;
+  margin: 0;
+}
+
+.not-found-link {
+  border-radius: 48px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
