@@ -70,9 +70,6 @@ export default function EventPage() {
       const eventData = await eventRes.json();
       const regsData = await regsRes.json();
 
-      setEvent(eventData[0]);
-      setRegistrations(regsData);
-
       setEvent(eventData[0] ?? null);
       setRegistrations(Array.isArray(regsData) ? regsData : []);
     } catch (error) {
@@ -150,7 +147,7 @@ export default function EventPage() {
         </Link>
 
         <section className="event-detail">
-          <img src={event.image} alt="" loading="lazy" />
+          <img src={event.image} alt={event.title} loading="lazy" />
 
           <div className="event-detail-content">
             <p className="event-category">{event.category}</p>
@@ -213,7 +210,7 @@ export default function EventPage() {
 
         <section className="signup-panel">
           <div>
-            <p className="eyebrowdark">Tilmelding</p>
+            <p className="eyebrow dark">Tilmelding</p>
 
             <h2>Reserver din plads</h2>
 
@@ -224,7 +221,11 @@ export default function EventPage() {
 
           <form onSubmit={handleSubmit} noValidate>
             <div>
+              <label htmlFor="name">Dit navn</label>
               <input
+                id="name"
+                aria-invalid={errors.name ? "true" : "false"}
+                aria-describedby={errors.name ? "name-error" : undefined}
                 type="text"
                 value={name}
                 onChange={(e) => {
@@ -238,7 +239,11 @@ export default function EventPage() {
             </div>
 
             <div>
+              <label htmlFor="email">Din email</label>
               <input
+                id="email"
+                aria-invalid={errors.email ? "true" : "false"}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 type="email"
                 value={email}
                 onChange={(e) => {
@@ -254,7 +259,7 @@ export default function EventPage() {
             <button type="submit">Tilmeld mig</button>
           </form>
           {submitted && (
-            <div className="success-popup">
+            <div className="success-popup" role="status" aria-live="polite">
               <h2>Tilmelding modtaget! ✓</h2>
               <p>Tak for din tilmelding.</p>
             </div>

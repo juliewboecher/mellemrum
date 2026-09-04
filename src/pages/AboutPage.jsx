@@ -6,7 +6,7 @@ export default function AboutPage() {
     <>
       <header className="page-header about-header">
         <div className="about-header-content">
-          <p className="eyebrow">Om Mellemrum</p>
+          <p className="eyebrow" aria-hidden="true">Om Mellemrum</p>
           <h1>Vi skaber mellemrum i kalenderen.</h1>
           <p>Udvalgte kulturoplevelser og nye perspektiver på Aarhus.</p>
         </div>
@@ -36,7 +36,7 @@ export default function AboutPage() {
           </div>
           <div className="about-audience-split">
             <article>
-              <span>Primær målgruppe</span>
+              <span className="audience-label">Primær målgruppe</span>
               <h3>For dig, der vil opdage byen</h3>
               <p>Find lokale oplevelser, få det vigtigste overblik, og tilmeld dig uden unødige omveje.</p>
               <Link to="/">Udforsk kommende events →</Link>

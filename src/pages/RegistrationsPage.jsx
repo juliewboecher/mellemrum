@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import Footer from "../components/Footer";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const headers = {
@@ -33,10 +34,16 @@ export default function RegistrationsPage() {
       <header className="admin-header">
         <p className="eyebrow">Internt overblik</p>
         <h1>Tilmeldinger</h1>
-        <p>{registrationCount} tilmeldinger i alt</p>
+        <p aria-live="polite">{registrationCount} tilmeldinger i alt</p>
       </header>
 
       <main>
+        <label
+          className="registration-search-label"
+          htmlFor="registration-search"
+        >
+          Søg efter event
+        </label>
         <input
           className="registration-search"
           type="text"
@@ -44,7 +51,9 @@ export default function RegistrationsPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-
+        {filteredRegistrations.length === 0 && (
+          <p>Ingen tilmeldinger matcher din søgning.</p>
+        )}
         <div className="registration-list">
           <div className="registration-row registration-labels">
             <span>Navn</span>
@@ -67,32 +76,7 @@ export default function RegistrationsPage() {
           ))}
         </div>
       </main>
-      <footer className="site-footer">
-        <div className="footer-top">
-          <div className="footer-intro">
-            <p className="footer-brand">
-              mellemrum<span>.</span>
-            </p>
-            <p>Udvalgte kulturoplevelser og nye perspektiver på Aarhus.</p>
-          </div>
-          <nav className="footer-links" aria-label="Footer">
-            <div className="footer-link-group">
-              <p className="footer-heading">Udforsk</p>
-              <Link to="/">Events</Link>
-              <Link to="/om">Om Mellemrum</Link>
-            </div>
-            <div className="footer-link-group">
-              <p className="footer-heading">For arrangører</p>
-              <Link to="/tilmeldinger">Se tilmeldinger</Link>
-              <a href="mailto:hej@mellemrum.dk">Kontakt os</a>
-            </div>
-          </nav>
-        </div>
-        <div className="footer-bottom">
-          <p className="footer-meta">© 2025 Mellemrum</p>
-          <p>Aarhus, Danmark</p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
