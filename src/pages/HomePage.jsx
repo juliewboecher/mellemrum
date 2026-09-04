@@ -137,38 +137,38 @@ export default function HomePage() {
 
         <section className="event-grid">
           {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-          <EventCardSkeleton key={i} />
-          ))
+            Array.from({ length: 6 }).map((_, i) => (
+              <EventCardSkeleton key={i} />
+            ))
           ) : filteredEvents.length === 0 ? (
             <p className="no-results">Ingen events matcher din søgning.</p>
           ) : (
             filteredEvents.map((event) => (
-            <article className="event-card" key={event.id}>
-            <Link to={`/events/${event.id}`} className="event-card-link">
-            <img src={event.image} alt={event.title} loading="lazy" />
+              <article className="event-card" key={event.id}>
+                <Link to={`/events/${event.id}`} className="event-card-link">
+                  <img src={event.image} alt={event.title} loading="lazy" />
 
-                    <div className="event-card-content">
-                      <p className="event-category">{event.category}</p>
-                      <h3>{event.title}</h3>
-                      <p>{event.summary}</p>
-                      <p>{event.venue?.name}</p>
+                  <div className="event-card-content">
+                    <p className="event-category">{event.category}</p>
+                    <h3>{event.title}</h3>
+                    <p>{event.summary}</p>
+                    <p>{event.venue?.name}</p>
 
-                      <div className="event-meta">
-                        <span>{formatEventDate(event.date)}</span>
-                        <span>{event.venueName}</span>
-                      </div>
+                    <div className="event-meta">
+                      <span>{formatEventDate(event.date)}</span>
+                      <span>{event.venueName}</span>
                     </div>
-                    
-                    <span className="card-link">Læs mere</span>
-                  </Link>
 
-                  <div className="event-actions">
-                    <span>{getSignupCount(event.title)} tilmeldte</span>
+                    {/* Begge i samme div */}
+                    <div className="event-actions">
+                      <span className="card-link">Læs mere</span>
+                      <span>{getSignupCount(event.title)} tilmeldte</span>
+                    </div>
                   </div>
-                </article>
-              ))
-            )}
+                </Link>
+              </article>
+            ))
+          )}
         </section>
       </main>
       <Footer />
