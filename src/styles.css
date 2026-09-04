@@ -165,6 +165,13 @@ select:focus {
   min-height: 100%;
   overflow: hidden;
   transition: box-shadow 180ms ease, transform 180ms ease;
+  position: relative;
+}
+
+.event-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 a.event-card {
@@ -253,6 +260,7 @@ a.event-card {
   padding: 0.7rem 1rem;
   text-decoration: none;
   transition: background 160ms ease, color 160ms ease;
+  position: relative;
 }
 
 .card-link:hover {

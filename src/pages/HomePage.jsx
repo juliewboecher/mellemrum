@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import Footer from "../components/Footer";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -23,7 +23,7 @@ function EventCardSkeleton() {
 }
 
 export default function HomePage() {
-  const navigate = useNavigate();
+  
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
@@ -90,7 +90,9 @@ export default function HomePage() {
   return (
     <>
       <header className="hero">
-        <p className="eyebrow">Kultur i Aarhus</p>
+        <p className="eyebrow" aria-hidden="true">
+          Kultur i Aarhus
+        </p>
         <h1>Find plads til noget nyt.</h1>
         <p className="hero-copy">
           Koncerter, talks og workshops samlet ét sted. Find dit næste event, og
@@ -110,7 +112,7 @@ export default function HomePage() {
           <p>Kuraterede oplevelser i byen – fra små scener til store idéer.</p>
         </section>
 
-        <section className="filters">
+        <section className="filters" aria-label="Liste over events">
           <label>
             Søg
             <input
@@ -139,32 +141,27 @@ export default function HomePage() {
                 <EventCardSkeleton key={i} />
               ))
             : filteredEvents.map((event) => (
-                <article
-                  className="event-card"
-                  key={event.id}
-                  onClick={() => navigate(`/events/${event.id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <img src={event.image} alt="" loading="lazy" />
-                  <div className="event-card-content">
-                    <p className="event-category">{event.category}</p>
-                    <h3>{event.title}</h3>
-                    <p>{event.summary}</p>
-                    <p>{event.venue?.name}</p>
-                    <div className="event-meta">
-                      <span>{formatEventDate(event.date)}</span>
-                      <span>{event.venueName}</span>
+                <article className="event-card" key={event.id}>
+                  <Link to={`/events/${event.id}`} className="event-card-link">
+                    <img src={event.image} alt={event.title} loading="lazy" />
+
+                    <div className="event-card-content">
+                      <p className="event-category">{event.category}</p>
+                      <h3>{event.title}</h3>
+                      <p>{event.summary}</p>
+                      <p>{event.venue?.name}</p>
+
+                      <div className="event-meta">
+                        <span>{formatEventDate(event.date)}</span>
+                        <span>{event.venueName}</span>
+                      </div>
                     </div>
-                    <div className="event-actions">
-                      <Link
-                        className="card-link"
-                        to={`/events/${event.id}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Læs mere
-                      </Link>
-                      <span>{getSignupCount(event.title)} tilmeldte</span>
-                    </div>
+                    
+                    <span className="card-link">Læs mere</span>
+                  </Link>
+
+                  <div className="event-actions">
+                    <span>{getSignupCount(event.title)} tilmeldte</span>
                   </div>
                 </article>
               ))}
